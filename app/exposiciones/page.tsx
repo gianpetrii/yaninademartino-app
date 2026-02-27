@@ -1,11 +1,7 @@
-import { Metadata } from "next";
+"use client";
+
 import { Exhibition } from "@/types";
 import { MapClient } from "@/components/map-client";
-
-export const metadata: Metadata = {
-  title: "Exposiciones - Yarina De Martino",
-  description: "Exposiciones individuales y colectivas de Yarina De Martino.",
-};
 
 const exhibitions: Exhibition[] = [
   {
