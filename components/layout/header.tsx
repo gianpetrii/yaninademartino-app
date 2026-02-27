@@ -1,154 +1,118 @@
 "use client";
 
 import Link from "next/link";
-import { useAuth } from "@/lib/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { ThemeToggle } from "@/components/theme-toggle";
-import { LogOut, User, Menu } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { useState } from "react";
 
 export function Header() {
-  const { user, logout } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-16 items-center justify-between">
-        <div className="flex items-center gap-6">
-          <Link href="/" className="flex items-center space-x-2">
-            <span className="text-xl font-bold">Base App</span>
-          </Link>
+    <header className="sticky top-0 z-50 w-full border-b border-foreground/10 bg-background/95 backdrop-blur-sm transition-all">
+      <div className="container flex h-20 items-center justify-between">
+        <Link href="/" className="flex items-center transition-opacity hover:opacity-60">
+          <span className="text-2xl font-light tracking-wider">YARINA DE MARTINO</span>
+        </Link>
 
-          <nav className="hidden md:flex items-center gap-6">
-            <Link
-              href="/"
-              className="text-sm font-medium transition-colors hover:text-primary"
-            >
-              Inicio
-            </Link>
-            <Link
-              href="/about"
-              className="text-sm font-medium transition-colors hover:text-primary"
-            >
-              Acerca de
-            </Link>
-            <Link
-              href="/contact"
-              className="text-sm font-medium transition-colors hover:text-primary"
-            >
-              Contacto
-            </Link>
-            {user && (
-              <Link
-                href="/dashboard"
-                className="text-sm font-medium transition-colors hover:text-primary"
-              >
-                Dashboard
-              </Link>
-            )}
-          </nav>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <ThemeToggle />
-
-          {user ? (
-            <div className="hidden md:flex items-center gap-2">
-              <Link href="/profile">
-                <Button variant="ghost" size="icon">
-                  <User className="h-5 w-5" />
-                </Button>
-              </Link>
-              <Button variant="ghost" size="icon" onClick={logout}>
-                <LogOut className="h-5 w-5" />
-              </Button>
-            </div>
-          ) : (
-            <div className="hidden md:flex items-center gap-2">
-              <Link href="/login">
-                <Button variant="ghost">Iniciar Sesión</Button>
-              </Link>
-              <Link href="/register">
-                <Button>Registrarse</Button>
-              </Link>
-            </div>
-          )}
-
-          <Button
-            variant="ghost"
-            size="icon"
-            className="md:hidden"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+        <nav className="hidden lg:flex items-center gap-8">
+          <Link
+            href="/obras"
+            className="text-sm font-light tracking-wide uppercase transition-all hover:text-foreground/60 hover:translate-y-[-2px]"
           >
-            <Menu className="h-5 w-5" />
-          </Button>
-        </div>
+            Obras
+          </Link>
+          <Link
+            href="/exposiciones"
+            className="text-sm font-light tracking-wide uppercase transition-all hover:text-foreground/60 hover:translate-y-[-2px]"
+          >
+            Exposiciones
+          </Link>
+          <Link
+            href="/premios"
+            className="text-sm font-light tracking-wide uppercase transition-all hover:text-foreground/60 hover:translate-y-[-2px]"
+          >
+            Premios
+          </Link>
+          <Link
+            href="/talleres"
+            className="text-sm font-light tracking-wide uppercase transition-all hover:text-foreground/60 hover:translate-y-[-2px]"
+          >
+            Talleres
+          </Link>
+          <Link
+            href="/prensa"
+            className="text-sm font-light tracking-wide uppercase transition-all hover:text-foreground/60 hover:translate-y-[-2px]"
+          >
+            Prensa
+          </Link>
+          <Link
+            href="/contacto"
+            className="text-sm font-light tracking-wide uppercase transition-all hover:text-foreground/60 hover:translate-y-[-2px]"
+          >
+            Contacto
+          </Link>
+        </nav>
+
+        <Button
+          variant="ghost"
+          size="icon"
+          className="lg:hidden transition-transform hover:rotate-90"
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+        >
+          {mobileMenuOpen ? (
+            <X className="h-6 w-6 transition-transform" />
+          ) : (
+            <Menu className="h-6 w-6 transition-transform" />
+          )}
+        </Button>
       </div>
 
-      {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t">
-          <nav className="container flex flex-col gap-4 py-4">
+        <div className="lg:hidden border-t border-foreground/10 animate-slide-in-bottom">
+          <nav className="container flex flex-col gap-6 py-8">
             <Link
-              href="/"
-              className="text-sm font-medium"
+              href="/obras"
+              className="text-base font-light tracking-wide uppercase transition-colors hover:text-foreground/60"
               onClick={() => setMobileMenuOpen(false)}
             >
-              Inicio
+              Obras
             </Link>
             <Link
-              href="/about"
-              className="text-sm font-medium"
+              href="/exposiciones"
+              className="text-base font-light tracking-wide uppercase transition-colors hover:text-foreground/60"
               onClick={() => setMobileMenuOpen(false)}
             >
-              Acerca de
+              Exposiciones
             </Link>
             <Link
-              href="/contact"
-              className="text-sm font-medium"
+              href="/premios"
+              className="text-base font-light tracking-wide uppercase transition-colors hover:text-foreground/60"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Premios
+            </Link>
+            <Link
+              href="/talleres"
+              className="text-base font-light tracking-wide uppercase transition-colors hover:text-foreground/60"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Talleres
+            </Link>
+            <Link
+              href="/prensa"
+              className="text-base font-light tracking-wide uppercase transition-colors hover:text-foreground/60"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Prensa
+            </Link>
+            <Link
+              href="/contacto"
+              className="text-base font-light tracking-wide uppercase transition-colors hover:text-foreground/60"
               onClick={() => setMobileMenuOpen(false)}
             >
               Contacto
             </Link>
-            {user ? (
-              <>
-                <Link
-                  href="/dashboard"
-                  className="text-sm font-medium"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  Dashboard
-                </Link>
-                <Link
-                  href="/profile"
-                  className="text-sm font-medium"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  Perfil
-                </Link>
-                <Button
-                  variant="ghost"
-                  className="justify-start"
-                  onClick={() => {
-                    logout();
-                    setMobileMenuOpen(false);
-                  }}
-                >
-                  Cerrar Sesión
-                </Button>
-              </>
-            ) : (
-              <>
-                <Link href="/login" onClick={() => setMobileMenuOpen(false)}>
-                  <Button variant="ghost" className="w-full justify-start">
-                    Iniciar Sesión
-                  </Button>
-                </Link>
-                <Link href="/register" onClick={() => setMobileMenuOpen(false)}>
-                  <Button className="w-full">Registrarse</Button>
-                </Link>
-              </>
-            )}
           </nav>
         </div>
       )}

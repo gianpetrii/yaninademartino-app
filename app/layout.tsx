@@ -8,8 +8,8 @@ import { Footer } from "@/components/layout/footer";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Base App - Tu aplicación base",
-  description: "Aplicación base con Next.js, Firebase y Tailwind CSS",
+  title: "Yarina De Martino - Artista Visual",
+  description: "Obra, exposiciones y trayectoria de Yarina De Martino, artista visual contemporánea especializada en arte brutalista y minimalista.",
 };
 
 export default function RootLayout({

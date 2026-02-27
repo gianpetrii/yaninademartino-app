@@ -1,84 +1,34 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
-# dependencies
+# Dependencies
 /node_modules
 /.pnp
 .pnp.js
-.yarn/install-state.gz
 
-# testing
+# Testing
 /coverage
-*.test.js
-*.test.ts
-*.test.tsx
-*.spec.js
-*.spec.ts
-*.spec.tsx
 
-# next.js
+# Next.js
 /.next/
 /out/
-/.next/cache
 
-# production
+# Production
 /build
-/dist
 
-# misc
+# Misc
 .DS_Store
 *.pem
-*.log
-*.swp
-*.swo
-*~
-.vscode/
-.idea/
-*.sublime-project
-*.sublime-workspace
 
-# debug
+# Debug
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
 
-# local env files
+# Local env files
 .env*.local
 .env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
 
-# vercel
+# Vercel
 .vercel
-.vercel.json
 
-# typescript
+# TypeScript
 *.tsbuildinfo
 next-env.d.ts
-
-# turbo
-.turbo
-
-# OS
-Thumbs.db
-.DS_Store
-
-# IDE
-*.swp
-*.swo
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-.idea
-*.iml
-
-# Temporary files
-*.tmp
-*.temp
-.cache/
-
