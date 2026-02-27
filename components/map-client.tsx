@@ -21,7 +21,8 @@ export function MapClient({ exhibitions }: MapClientProps) {
   }, []);
 
   useEffect(() => {
-    if (!L || map) return;
+    if (!L) return;
+    if (map) return;
 
     const link = document.createElement("link");
     link.rel = "stylesheet";
@@ -95,12 +96,12 @@ export function MapClient({ exhibitions }: MapClientProps) {
           }
         ).addTo(mapInstance);
         
-        marker.on('click', function(e) {
+        marker.on('click', function(e: any) {
           L.DomEvent.stopPropagation(e);
           setSelectedExhibition(exhibition);
         });
         
-        marker.getElement()?.addEventListener('click', function(e) {
+        marker.getElement()?.addEventListener('click', function(e: Event) {
           e.stopPropagation();
           setSelectedExhibition(exhibition);
         });
