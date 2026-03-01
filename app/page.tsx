@@ -11,6 +11,7 @@ const featuredExhibitions: Exhibition[] = [
     id: "1",
     title: "Estructuras del Silencio",
     type: "individual",
+    status: "pasada",
     venue: "Galería Arte Contemporáneo",
     city: "Buenos Aires",
     country: "Argentina",
@@ -21,6 +22,7 @@ const featuredExhibitions: Exhibition[] = [
     id: "2",
     title: "Hormigón y Pigmento",
     type: "individual",
+    status: "pasada",
     venue: "Centro Cultural Recoleta",
     city: "Buenos Aires",
     country: "Argentina",
@@ -31,10 +33,13 @@ const featuredExhibitions: Exhibition[] = [
     id: "3",
     title: "Bienal de Arte Latinoamericano",
     type: "colectiva",
+    status: "proxima",
     venue: "Museo Nacional de Bellas Artes",
     city: "Santiago",
     country: "Chile",
-    year: 2022,
+    year: 2026,
+    startDate: "2026-06-15",
+    endDate: "2026-08-30",
     coordinates: { lat: -33.4372, lng: -70.6506 },
   },
 ];
@@ -105,13 +110,13 @@ export default function Home() {
 
       <section className="border-t border-foreground/10">
         <div className="container py-20 md:py-32">
-          <div className="mb-12 space-y-4">
-            <div className="flex items-center gap-3">
+          <div className="mb-12 space-y-4 text-center">
+            <div className="flex items-center justify-center gap-3">
               <MapPin className="h-8 w-8" />
               <h2 className="text-3xl font-light tracking-widest md:text-5xl">EXPOSICIONES</h2>
             </div>
-            <div className="h-1 w-24 bg-foreground"></div>
-            <p className="max-w-2xl text-lg font-light text-muted-foreground">
+            <div className="h-1 w-24 bg-foreground mx-auto"></div>
+            <p className="max-w-2xl text-lg font-light text-muted-foreground mx-auto">
               Presencia en espacios de arte de Argentina y Latinoamérica.
             </p>
           </div>
@@ -134,9 +139,9 @@ export default function Home() {
 
       <section className="border-t border-foreground/10 bg-muted/20">
         <div className="container py-20 md:py-32">
-          <div className="mb-12 space-y-4">
+          <div className="mb-12 space-y-4 text-center">
             <h2 className="text-3xl font-light tracking-widest md:text-5xl">OBRA DESTACADA</h2>
-            <div className="h-1 w-24 bg-foreground"></div>
+            <div className="h-1 w-24 bg-foreground mx-auto"></div>
           </div>
           
           <div className="grid gap-12 md:grid-cols-[2fr_1fr]">
@@ -175,9 +180,9 @@ export default function Home() {
 
       <section className="border-t border-foreground/10 bg-muted/20">
         <div className="container py-20 md:py-32">
-          <div className="mb-12 space-y-4">
+          <div className="mb-12 space-y-4 text-center">
             <h2 className="text-3xl font-light tracking-widest md:text-5xl">RECONOCIMIENTOS</h2>
-            <div className="h-1 w-24 bg-foreground"></div>
+            <div className="h-1 w-24 bg-foreground mx-auto"></div>
           </div>
           
           <div className="space-y-8">
