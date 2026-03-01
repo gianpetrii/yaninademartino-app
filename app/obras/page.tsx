@@ -3,11 +3,6 @@
 import Image from "next/image";
 import { Artwork } from "@/types";
 
-export const metadata: Metadata = {
-  title: "Obras - Yarina De Martino",
-  description: "Galería de obras de Yarina De Martino, artista visual contemporánea.",
-};
-
 const artworks: Artwork[] = [
   {
     id: "1",
