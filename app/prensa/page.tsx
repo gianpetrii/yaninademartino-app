@@ -95,11 +95,7 @@ export default function PrensaPage() {
                     <span className="uppercase tracking-wider">{item.publication}</span>
                     <span>·</span>
                     <time dateTime={item.date}>
-                      {new Date(item.date).toLocaleDateString('es-AR', { 
-                        year: 'numeric', 
-                        month: 'long', 
-                        day: 'numeric' 
-                      })}
+                      {formatFullDate(item.date)}
                     </time>
                   </div>
                 </div>

@@ -3,6 +3,12 @@
 import { Exhibition } from "@/types";
 import { MapClient } from "@/components/map-client";
 
+function formatDate(dateString: string): string {
+  const [year, month, day] = dateString.split('-');
+  const monthNames = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+  return `${parseInt(day)} de ${monthNames[parseInt(month) - 1]}`;
+}
+
 const exhibitions: Exhibition[] = [
   {
     id: "1",
@@ -155,7 +161,7 @@ export default function ExposicionesPage() {
                       <p className="text-sm font-light text-muted-foreground">
                         {exhibition.year}
                         {exhibition.startDate && exhibition.endDate && (
-                          <> · {new Date(exhibition.startDate).toLocaleDateString('es-AR', { month: 'long', day: 'numeric' })} - {new Date(exhibition.endDate).toLocaleDateString('es-AR', { month: 'long', day: 'numeric' })}</>
+                          <> · {formatDate(exhibition.startDate)} - {formatDate(exhibition.endDate)}</>
                         )}
                       </p>
                       {exhibition.description && (
@@ -209,7 +215,7 @@ export default function ExposicionesPage() {
                     <p className="text-sm font-light text-muted-foreground">
                       {exhibition.year}
                       {exhibition.startDate && exhibition.endDate && (
-                        <> · {new Date(exhibition.startDate).toLocaleDateString('es-AR', { month: 'long', day: 'numeric' })} - {new Date(exhibition.endDate).toLocaleDateString('es-AR', { month: 'long', day: 'numeric' })}</>
+                        <> · {formatDate(exhibition.startDate)} - {formatDate(exhibition.endDate)}</>
                       )}
                     </p>
                     {exhibition.description && (
