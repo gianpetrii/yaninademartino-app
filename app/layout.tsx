@@ -12,12 +12,12 @@ export const metadata: Metadata = {
   description: "Obra, exposiciones y trayectoria de Yarina De Martino, artista visual contemporánea especializada en arte brutalista y minimalista.",
   icons: {
     icon: [
-      { url: '/images/logo/logo.png?v=2' },
+      { url: '/images/logo/logo.svg', type: 'image/svg+xml' },
       { url: '/images/logo/logo.png?v=2', sizes: '32x32', type: 'image/png' },
       { url: '/images/logo/logo.png?v=2', sizes: '16x16', type: 'image/png' },
     ],
     apple: [
-      { url: '/images/logo/logo.png?v=2' },
+      { url: '/images/logo/logo.svg', type: 'image/svg+xml' },
     ],
   },
 };
