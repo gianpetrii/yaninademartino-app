@@ -11,6 +11,8 @@ export function MapClient({ exhibitions }: MapClientProps) {
   const [map, setMap] = useState<any>(null);
   const [L, setL] = useState<any>(null);
   const [selectedExhibition, setSelectedExhibition] = useState<Exhibition | null>(null);
+  const [groupedExhibitionsAtLocation, setGroupedExhibitionsAtLocation] = useState<Exhibition[]>([]);
+  const [currentIndexInGroup, setCurrentIndexInGroup] = useState(0);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -79,8 +81,21 @@ export function MapClient({ exhibitions }: MapClientProps) {
       maxZoom: 10,
     }).addTo(mapInstance);
 
+    const groupedExhibitions = new Map<string, Exhibition[]>();
+    
     exhibitions.forEach((exhibition) => {
       if (exhibition.coordinates) {
+        const key = `${exhibition.coordinates.lat.toFixed(2)},${exhibition.coordinates.lng.toFixed(2)}`;
+        if (!groupedExhibitions.has(key)) {
+          groupedExhibitions.set(key, []);
+        }
+        groupedExhibitions.get(key)!.push(exhibition);
+      }
+    });
+
+    groupedExhibitions.forEach((group, key) => {
+      if (group.length === 1) {
+        const exhibition = group[0];
         const markerColor = exhibition.status === 'proxima' ? '#dc2626' : '#000';
         
         const customIcon = L.divIcon({
@@ -91,7 +106,7 @@ export function MapClient({ exhibitions }: MapClientProps) {
         });
         
         const marker = L.marker(
-          [exhibition.coordinates.lat, exhibition.coordinates.lng],
+          [exhibition.coordinates!.lat, exhibition.coordinates!.lng],
           { 
             icon: customIcon,
             title: exhibition.title
@@ -101,11 +116,51 @@ export function MapClient({ exhibitions }: MapClientProps) {
         marker.on('click', function(e: any) {
           L.DomEvent.stopPropagation(e);
           setSelectedExhibition(exhibition);
+          setGroupedExhibitionsAtLocation([exhibition]);
+          setCurrentIndexInGroup(0);
         });
         
         marker.getElement()?.addEventListener('click', function(e: Event) {
           e.stopPropagation();
           setSelectedExhibition(exhibition);
+          setGroupedExhibitionsAtLocation([exhibition]);
+          setCurrentIndexInGroup(0);
+        });
+      } else {
+        const hasProxima = group.some(e => e.status === 'proxima');
+        const markerColor = hasProxima ? '#dc2626' : '#000';
+        const firstExhibition = group[0];
+        
+        const customIcon = L.divIcon({
+          className: 'custom-marker',
+          html: `<div style="position: relative; width: 20px; height: 20px;">
+            <div style="width: 20px; height: 20px; background: ${markerColor}; border: 3px solid #fff; box-shadow: 0 0 0 2px ${markerColor}; transition: transform 0.2s;"></div>
+            <div style="position: absolute; top: -6px; right: -6px; width: 16px; height: 16px; background: #fff; border: 2px solid ${markerColor}; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: bold;">${group.length}</div>
+          </div>`,
+          iconSize: [20, 20],
+          iconAnchor: [10, 10],
+        });
+        
+        const marker = L.marker(
+          [firstExhibition.coordinates!.lat, firstExhibition.coordinates!.lng],
+          { 
+            icon: customIcon,
+            title: `${group.length} exposiciones`
+          }
+        ).addTo(mapInstance);
+        
+        marker.on('click', function(e: any) {
+          L.DomEvent.stopPropagation(e);
+          setSelectedExhibition(group[0]);
+          setGroupedExhibitionsAtLocation(group);
+          setCurrentIndexInGroup(0);
+        });
+        
+        marker.getElement()?.addEventListener('click', function(e: Event) {
+          e.stopPropagation();
+          setSelectedExhibition(group[0]);
+          setGroupedExhibitionsAtLocation(group);
+          setCurrentIndexInGroup(0);
         });
       }
     });
@@ -134,14 +189,54 @@ export function MapClient({ exhibitions }: MapClientProps) {
             <button
               onClick={() => {
                 setSelectedExhibition(null);
+                setGroupedExhibitionsAtLocation([]);
+                setCurrentIndexInGroup(0);
               }}
               className="absolute right-2 top-2 text-2xl font-light leading-none transition-transform hover:rotate-90 hover:opacity-60"
             >
               ×
             </button>
+            
+            {groupedExhibitionsAtLocation.length > 1 && (
+              <div className="mb-4 flex items-center justify-between border-b border-foreground/20 pb-3">
+                <span className="text-xs font-light uppercase tracking-wider text-muted-foreground">
+                  {currentIndexInGroup + 1} de {groupedExhibitionsAtLocation.length} en esta ubicación
+                </span>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => {
+                      const newIndex = currentIndexInGroup > 0 ? currentIndexInGroup - 1 : groupedExhibitionsAtLocation.length - 1;
+                      setCurrentIndexInGroup(newIndex);
+                      setSelectedExhibition(groupedExhibitionsAtLocation[newIndex]);
+                    }}
+                    className="h-6 w-6 border border-foreground transition-all hover:bg-foreground hover:text-background"
+                    aria-label="Anterior"
+                  >
+                    ←
+                  </button>
+                  <button
+                    onClick={() => {
+                      const newIndex = currentIndexInGroup < groupedExhibitionsAtLocation.length - 1 ? currentIndexInGroup + 1 : 0;
+                      setCurrentIndexInGroup(newIndex);
+                      setSelectedExhibition(groupedExhibitionsAtLocation[newIndex]);
+                    }}
+                    className="h-6 w-6 border border-foreground transition-all hover:bg-foreground hover:text-background"
+                    aria-label="Siguiente"
+                  >
+                    →
+                  </button>
+                </div>
+              </div>
+            )}
+            
             <div className="space-y-3">
               <h3 className="text-lg font-light tracking-wide pr-6 animate-fade-in-left">
                 {selectedExhibition.title}
+                {selectedExhibition.isRecurring && selectedExhibition.editions && (
+                  <span className="block text-xs font-light uppercase tracking-wider text-muted-foreground mt-1">
+                    Ediciones: {selectedExhibition.editions.join(', ')}
+                  </span>
+                )}
               </h3>
               <div className="space-y-1 text-sm font-light text-muted-foreground animate-fade-in-left" style={{ animationDelay: '0.1s' }}>
                 <div className="flex items-center gap-2">
@@ -168,6 +263,21 @@ export function MapClient({ exhibitions }: MapClientProps) {
                 <p className="pt-2 text-sm font-light leading-relaxed animate-fade-in-left" style={{ animationDelay: '0.2s' }}>
                   {selectedExhibition.description}
                 </p>
+              )}
+              {selectedExhibition.eventUrl && (
+                <a 
+                  href={selectedExhibition.eventUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 pt-2 text-sm font-light uppercase tracking-wider text-red-600 transition-all hover:gap-3 hover:underline animate-fade-in-left"
+                  style={{ animationDelay: '0.3s' }}
+                  onClick={(e: Event) => e.stopPropagation()}
+                >
+                  Más información
+                  <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                </a>
               )}
             </div>
           </div>

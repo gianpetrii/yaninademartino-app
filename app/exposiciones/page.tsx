@@ -17,6 +17,7 @@ const exhibitions: Exhibition[] = [
     endDate: "2026-09-30",
     description: "Próxima exposición individual con obras recientes que profundizan en la exploración del espacio y la forma.",
     coordinates: { lat: -34.6037, lng: -58.3816 },
+    eventUrl: "https://galeriaarte.com.ar/nuevas-geometrias",
   },
   {
     id: "2",
@@ -33,6 +34,7 @@ const exhibitions: Exhibition[] = [
     coordinates: { lat: -33.4372, lng: -70.6506 },
     isRecurring: true,
     editions: [2022, 2026],
+    eventUrl: "https://bienallatinoamericana.cl/2026",
   },
   {
     id: "3",
@@ -160,6 +162,19 @@ export default function ExposicionesPage() {
                         <p className="pt-2 text-sm font-light text-muted-foreground max-w-2xl">
                           {exhibition.description}
                         </p>
+                      )}
+                      {exhibition.eventUrl && (
+                        <a 
+                          href={exhibition.eventUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 pt-2 text-sm font-light uppercase tracking-wider text-red-600 transition-all hover:gap-3 hover:underline"
+                        >
+                          Más información
+                          <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                          </svg>
+                        </a>
                       )}
                     </div>
                   </div>

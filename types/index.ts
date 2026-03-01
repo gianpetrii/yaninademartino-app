@@ -27,6 +27,7 @@ export interface Exhibition {
   };
   isRecurring?: boolean;
   editions?: number[];
+  eventUrl?: string;
 }
 
 export interface Award {
