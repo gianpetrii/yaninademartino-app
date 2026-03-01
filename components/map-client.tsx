@@ -134,7 +134,7 @@ export function MapClient({ exhibitions }: MapClientProps) {
         animateAddingMarkers: true,
       iconCreateFunction: function(cluster: any) {
         const markers = cluster.getAllChildMarkers();
-        const hasProxima = markers.some((m: any) => m.options.exhibition?.status === 'proxima');
+        const hasProxima = markers.some((m: any) => m.exhibitionData?.exhibition?.status === 'proxima');
         const count = markers.length;
         const color = hasProxima ? '#dc2626' : '#000';
         
@@ -174,10 +174,11 @@ export function MapClient({ exhibitions }: MapClientProps) {
         [exhibition.coordinates!.lat, exhibition.coordinates!.lng],
         { 
           icon: customIcon,
-          title: group.length > 1 ? `${group.length} exposiciones` : exhibition.title,
-          exhibition: exhibition
-        }
+          title: group.length > 1 ? `${group.length} exposiciones` : exhibition.title
+        } as any
       );
+      
+      (marker as any).exhibitionData = { exhibition, group };
       
       marker.on('click', function(e: any) {
         L.DomEvent.stopPropagation(e);
@@ -312,7 +313,7 @@ export function MapClient({ exhibitions }: MapClientProps) {
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 pt-2 text-sm font-light uppercase tracking-wider text-red-600 transition-all hover:gap-3 hover:underline animate-fade-in-left"
                   style={{ animationDelay: '0.3s' }}
-                  onClick={(e: Event) => e.stopPropagation()}
+                  onClick={(e) => e.stopPropagation()}
                 >
                   Más información
                   <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
