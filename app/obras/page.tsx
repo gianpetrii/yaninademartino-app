@@ -1,4 +1,5 @@
-import { Metadata } from "next";
+"use client";
+
 import Image from "next/image";
 import { Artwork } from "@/types";
 
@@ -14,7 +15,7 @@ const artworks: Artwork[] = [
     year: 2023,
     technique: "Acrílico sobre tela",
     dimensions: "120 x 100 cm",
-    imageUrl: "/images/obras/placeholder-1.jpg",
+    imageUrl: "/images/obras/DSC_2192-scaled.jpg",
     description: "Exploración de formas geométricas y espacios negativos.",
     category: "Pintura",
   },
@@ -24,7 +25,7 @@ const artworks: Artwork[] = [
     year: 2023,
     technique: "Técnica mixta",
     dimensions: "80 x 80 cm",
-    imageUrl: "/images/obras/placeholder-2.jpg",
+    imageUrl: "/images/obras/DSC_2206--scaled.jpg",
     description: "Composición minimalista con texturas brutalistas.",
     category: "Pintura",
   },
@@ -34,7 +35,7 @@ const artworks: Artwork[] = [
     year: 2022,
     technique: "Acrílico sobre tela",
     dimensions: "150 x 120 cm",
-    imageUrl: "/images/obras/placeholder-3.jpg",
+    imageUrl: "/images/obras/91.png",
     description: "Diálogo entre el espacio y la materia.",
     category: "Pintura",
   },
@@ -44,7 +45,7 @@ const artworks: Artwork[] = [
     year: 2022,
     technique: "Óleo sobre tela",
     dimensions: "100 x 100 cm",
-    imageUrl: "/images/obras/placeholder-4.jpg",
+    imageUrl: "/images/obras/DSC_2192-scaled.jpg",
     description: "Inspirada en arquitectura brutalista urbana.",
     category: "Pintura",
   },
@@ -54,7 +55,7 @@ const artworks: Artwork[] = [
     year: 2021,
     technique: "Acrílico sobre tela",
     dimensions: "90 x 120 cm",
-    imageUrl: "/images/obras/placeholder-5.jpg",
+    imageUrl: "/images/obras/DSC_2206--scaled.jpg",
     description: "Estudio de equilibrio y tensión visual.",
     category: "Pintura",
   },
@@ -64,7 +65,7 @@ const artworks: Artwork[] = [
     year: 2021,
     technique: "Técnica mixta",
     dimensions: "110 x 90 cm",
-    imageUrl: "/images/obras/placeholder-6.jpg",
+    imageUrl: "/images/obras/91.png",
     description: "Encuentro de líneas y planos en el espacio.",
     category: "Pintura",
   },
@@ -93,11 +94,13 @@ export default function ObrasPage() {
               }}
             >
               <div className="relative aspect-[4/5] overflow-hidden border-2 border-foreground bg-muted transition-all duration-300 hover:shadow-[8px_8px_0_0_rgba(0,0,0,1)] hover:-translate-y-1">
-                <div className="absolute inset-0 flex items-center justify-center transition-all duration-500 group-hover:scale-110">
-                  <span className="text-sm font-light text-muted-foreground">
-                    [Imagen de obra]
-                  </span>
-                </div>
+                <Image
+                  src={artwork.imageUrl}
+                  alt={artwork.title}
+                  fill
+                  className="object-cover transition-all duration-500 group-hover:scale-110"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                />
                 <div className="absolute inset-0 bg-foreground opacity-0 transition-opacity duration-300 group-hover:opacity-5"></div>
               </div>
               <div className="space-y-2">
