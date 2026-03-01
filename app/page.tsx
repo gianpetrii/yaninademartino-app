@@ -71,7 +71,7 @@ export default function Home() {
       <section className="container grid min-h-[calc(100vh-10rem)] items-center gap-12 py-20 md:grid-cols-2">
         <div className="flex flex-col gap-8">
           <h1 className="animate-fade-in-left text-5xl font-light leading-tight tracking-widest md:text-6xl lg:text-7xl">
-            YARINA<br />DE MARTINO
+            YANINA<br />DE MARTINO
           </h1>
           <p className="animate-fade-in-left max-w-[500px] text-lg font-light text-muted-foreground" style={{ animationDelay: '0.2s' }}>
             Artista visual contemporánea. Exploración del brutalismo y el minimalismo a través de formas, texturas y espacios.

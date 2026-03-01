@@ -8,7 +8,7 @@ export function Footer() {
       <div className="container py-12 md:py-16">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
           <div className="space-y-2">
-            <h3 className="text-lg font-light tracking-wider">YARINA DE MARTINO</h3>
+            <h3 className="text-lg font-light tracking-wider">YANINA DE MARTINO</h3>
             <p className="text-sm font-light text-muted-foreground">
               Artista Visual
             </p>
@@ -55,7 +55,7 @@ export function Footer() {
         </div>
 
         <div className="mt-12 pt-8 border-t border-foreground/10 text-center text-sm font-light text-muted-foreground">
-          <p>&copy; {currentYear} Yarina De Martino. Todos los derechos reservados.</p>
+          <p>&copy; {currentYear} Yanina De Martino. Todos los derechos reservados.</p>
         </div>
       </div>
     </footer>

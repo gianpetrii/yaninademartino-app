@@ -2,8 +2,8 @@ import { Metadata } from "next";
 import { Award } from "@/types";
 
 export const metadata: Metadata = {
-  title: "Premios - Yarina De Martino",
-  description: "Premios y reconocimientos de Yarina De Martino.",
+  title: "Premios - Yanina De Martino",
+  description: "Premios y reconocimientos de Yanina De Martino.",
 };
 
 const awards: Award[] = [

@@ -59,7 +59,7 @@ export default function ContactoPage() {
                   <h3 className="text-lg font-light tracking-wide">Email</h3>
                 </div>
                 <p className="font-light text-muted-foreground">
-                  info@yarinademartino.com
+                  info@yaninademartino.com
                 </p>
               </div>
 

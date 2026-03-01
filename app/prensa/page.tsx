@@ -3,8 +3,8 @@ import { PressItem } from "@/types";
 import { ExternalLink } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Prensa - Yarina De Martino",
-  description: "Apariciones en medios y cobertura de prensa de Yarina De Martino.",
+  title: "Prensa - Yanina De Martino",
+  description: "Apariciones en medios y cobertura de prensa de Yanina De Martino.",
 };
 
 function formatFullDate(dateString: string): string {
@@ -19,7 +19,7 @@ const pressItems: PressItem[] = [
     title: "El minimalismo brutalista de una nueva generación",
     publication: "Revista Ñ - Clarín",
     date: "2023-09-15",
-    excerpt: "Yarina De Martino se consolida como una de las voces más interesantes del arte contemporáneo argentino, con una propuesta que fusiona la austeridad del brutalismo arquitectónico con la sensibilidad pictórica.",
+    excerpt: "Yanina De Martino se consolida como una de las voces más interesantes del arte contemporáneo argentino, con una propuesta que fusiona la austeridad del brutalismo arquitectónico con la sensibilidad pictórica.",
     url: "#",
   },
   {
@@ -51,7 +51,7 @@ const pressItems: PressItem[] = [
     title: "Premio Nacional: el reconocimiento a una trayectoria ascendente",
     publication: "Página/12 - Cultura",
     date: "2023-10-22",
-    excerpt: "El Fondo Nacional de las Artes distingue a Yarina De Martino por su aporte al arte contemporáneo argentino.",
+    excerpt: "El Fondo Nacional de las Artes distingue a Yanina De Martino por su aporte al arte contemporáneo argentino.",
     url: "#",
   },
   {

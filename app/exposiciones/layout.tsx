@@ -1,8 +1,8 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Exposiciones - Yarina De Martino",
-  description: "Exposiciones individuales y colectivas de Yarina De Martino.",
+  title: "Exposiciones - Yanina De Martino",
+  description: "Exposiciones individuales y colectivas de Yanina De Martino.",
 };
 
 export default function ExposicionesLayout({

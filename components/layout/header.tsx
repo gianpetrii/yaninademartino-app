@@ -12,7 +12,7 @@ export function Header() {
     <header className="sticky top-0 z-50 w-full border-b border-foreground/10 bg-background/95 backdrop-blur-sm transition-all">
       <div className="container flex h-20 items-center justify-between">
         <Link href="/" className="flex items-center transition-opacity hover:opacity-60">
-          <span className="text-2xl font-light tracking-wider">YARINA DE MARTINO</span>
+          <span className="text-2xl font-light tracking-wider">YANINA DE MARTINO</span>
         </Link>
 
         <nav className="hidden lg:flex items-center gap-8">

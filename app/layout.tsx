@@ -8,8 +8,8 @@ import { Footer } from "@/components/layout/footer";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Yarina De Martino - Artista Visual",
-  description: "Obra, exposiciones y trayectoria de Yarina De Martino, artista visual contemporánea especializada en arte brutalista y minimalista.",
+  title: "Yanina De Martino - Artista Visual",
+  description: "Obra, exposiciones y trayectoria de Yanina De Martino, artista visual contemporánea especializada en arte brutalista y minimalista.",
   icons: {
     icon: [
       { url: '/images/logo/logo.svg', type: 'image/svg+xml' },

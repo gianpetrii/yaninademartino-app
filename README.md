@@ -1,4 +1,4 @@
-# Yarina De Martino
+# Yanina De Martino
 
 Sitio web institucional de la artista visual.
 

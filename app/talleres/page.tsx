@@ -2,8 +2,8 @@ import { Metadata } from "next";
 import { Workshop } from "@/types";
 
 export const metadata: Metadata = {
-  title: "Talleres - Yarina De Martino",
-  description: "Formación y talleres de Yarina De Martino.",
+  title: "Talleres - Yanina De Martino",
+  description: "Formación y talleres de Yanina De Martino.",
 };
 
 const workshops: Workshop[] = [
