@@ -13,6 +13,7 @@ export interface Exhibition {
   id: string;
   title: string;
   type: 'individual' | 'colectiva';
+  status: 'pasada' | 'proxima';
   venue: string;
   city: string;
   country: string;
@@ -24,6 +25,8 @@ export interface Exhibition {
     lat: number;
     lng: number;
   };
+  isRecurring?: boolean;
+  editions?: number[];
 }
 
 export interface Award {
