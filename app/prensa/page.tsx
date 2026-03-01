@@ -7,6 +7,12 @@ export const metadata: Metadata = {
   description: "Apariciones en medios y cobertura de prensa de Yarina De Martino.",
 };
 
+function formatFullDate(dateString: string): string {
+  const [year, month, day] = dateString.split('-');
+  const monthNames = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+  return `${parseInt(day)} de ${monthNames[parseInt(month) - 1]} de ${year}`;
+}
+
 const pressItems: PressItem[] = [
   {
     id: "1",
