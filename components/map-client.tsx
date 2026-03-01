@@ -10,26 +10,41 @@ interface MapClientProps {
 export function MapClient({ exhibitions }: MapClientProps) {
   const [map, setMap] = useState<any>(null);
   const [L, setL] = useState<any>(null);
+  const [MarkerClusterGroup, setMarkerClusterGroup] = useState<any>(null);
   const [selectedExhibition, setSelectedExhibition] = useState<Exhibition | null>(null);
   const [groupedExhibitionsAtLocation, setGroupedExhibitionsAtLocation] = useState<Exhibition[]>([]);
   const [currentIndexInGroup, setCurrentIndexInGroup] = useState(0);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      import("leaflet").then((leaflet) => {
+      Promise.all([
+        import("leaflet"),
+        import("leaflet.markercluster")
+      ]).then(([leaflet, markerCluster]) => {
         setL(leaflet.default);
+        setMarkerClusterGroup((leaflet.default as any).MarkerClusterGroup);
       });
     }
   }, []);
 
   useEffect(() => {
-    if (!L) return;
+    if (!L || !MarkerClusterGroup) return;
     if (map) return;
 
     const link = document.createElement("link");
     link.rel = "stylesheet";
     link.href = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
     document.head.appendChild(link);
+
+    const clusterLink = document.createElement("link");
+    clusterLink.rel = "stylesheet";
+    clusterLink.href = "https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css";
+    document.head.appendChild(clusterLink);
+
+    const clusterDefaultLink = document.createElement("link");
+    clusterDefaultLink.rel = "stylesheet";
+    clusterDefaultLink.href = "https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css";
+    document.head.appendChild(clusterDefaultLink);
 
     const style = document.createElement("style");
     style.textContent = `
@@ -67,6 +82,25 @@ export function MapClient({ exhibitions }: MapClientProps) {
         transform: scale(1.3);
         transition: transform 0.2s;
       }
+      .marker-cluster {
+        background: #fff !important;
+        border: 2px solid #000 !important;
+        border-radius: 0 !important;
+      }
+      .marker-cluster.cluster-proxima {
+        border-color: #dc2626 !important;
+      }
+      .marker-cluster div {
+        background: rgba(255,255,255,0.9) !important;
+        border-radius: 0 !important;
+        font-weight: 300 !important;
+        font-size: 12px !important;
+        color: #000 !important;
+      }
+      .marker-cluster.cluster-proxima div {
+        color: #dc2626 !important;
+        font-weight: 400 !important;
+      }
     `;
     document.head.appendChild(style);
 
@@ -81,89 +115,76 @@ export function MapClient({ exhibitions }: MapClientProps) {
       maxZoom: 10,
     }).addTo(mapInstance);
 
-    const groupedExhibitions = new Map<string, Exhibition[]>();
-    
-    exhibitions.forEach((exhibition) => {
-      if (exhibition.coordinates) {
-        const key = `${exhibition.coordinates.lat.toFixed(2)},${exhibition.coordinates.lng.toFixed(2)}`;
-        if (!groupedExhibitions.has(key)) {
-          groupedExhibitions.set(key, []);
-        }
-        groupedExhibitions.get(key)!.push(exhibition);
+    const markers = new MarkerClusterGroup({
+      maxClusterRadius: 80,
+      spiderfyOnMaxZoom: true,
+      showCoverageOnHover: false,
+      zoomToBoundsOnClick: true,
+      iconCreateFunction: function(cluster: any) {
+        const markers = cluster.getAllChildMarkers();
+        const hasProxima = markers.some((m: any) => m.options.exhibition?.status === 'proxima');
+        const count = markers.length;
+        const color = hasProxima ? '#dc2626' : '#000';
+        
+        return L.divIcon({
+          html: `<div style="width: 32px; height: 32px; background: #fff; border: 2px solid ${color}; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: ${hasProxima ? '500' : '300'}; color: ${color};">${count}</div>`,
+          className: `marker-cluster ${hasProxima ? 'cluster-proxima' : ''}`,
+          iconSize: [32, 32],
+        });
       }
     });
 
-    groupedExhibitions.forEach((group, key) => {
-      if (group.length === 1) {
-        const exhibition = group[0];
-        const markerColor = exhibition.status === 'proxima' ? '#dc2626' : '#000';
-        
-        const customIcon = L.divIcon({
-          className: 'custom-marker',
-          html: `<div style="width: 14px; height: 14px; background: ${markerColor}; border: 3px solid #fff; box-shadow: 0 0 0 2px ${markerColor}; transition: transform 0.2s;"></div>`,
-          iconSize: [14, 14],
-          iconAnchor: [7, 7],
-        });
-        
-        const marker = L.marker(
-          [exhibition.coordinates!.lat, exhibition.coordinates!.lng],
-          { 
-            icon: customIcon,
-            title: exhibition.title
-          }
-        ).addTo(mapInstance);
-        
-        marker.on('click', function(e: any) {
-          L.DomEvent.stopPropagation(e);
-          setSelectedExhibition(exhibition);
-          setGroupedExhibitionsAtLocation([exhibition]);
-          setCurrentIndexInGroup(0);
-        });
-        
-        marker.getElement()?.addEventListener('click', function(e: Event) {
-          e.stopPropagation();
-          setSelectedExhibition(exhibition);
-          setGroupedExhibitionsAtLocation([exhibition]);
-          setCurrentIndexInGroup(0);
-        });
-      } else {
-        const hasProxima = group.some(e => e.status === 'proxima');
-        const markerColor = hasProxima ? '#dc2626' : '#000';
-        const firstExhibition = group[0];
-        
-        const customIcon = L.divIcon({
-          className: 'custom-marker',
-          html: `<div style="position: relative; width: 20px; height: 20px;">
-            <div style="width: 20px; height: 20px; background: ${markerColor}; border: 3px solid #fff; box-shadow: 0 0 0 2px ${markerColor}; transition: transform 0.2s;"></div>
-            <div style="position: absolute; top: -6px; right: -6px; width: 16px; height: 16px; background: #fff; border: 2px solid ${markerColor}; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: bold;">${group.length}</div>
-          </div>`,
-          iconSize: [20, 20],
-          iconAnchor: [10, 10],
-        });
-        
-        const marker = L.marker(
-          [firstExhibition.coordinates!.lat, firstExhibition.coordinates!.lng],
-          { 
-            icon: customIcon,
-            title: `${group.length} exposiciones`
-          }
-        ).addTo(mapInstance);
-        
-        marker.on('click', function(e: any) {
-          L.DomEvent.stopPropagation(e);
-          setSelectedExhibition(group[0]);
-          setGroupedExhibitionsAtLocation(group);
-          setCurrentIndexInGroup(0);
-        });
-        
-        marker.getElement()?.addEventListener('click', function(e: Event) {
-          e.stopPropagation();
-          setSelectedExhibition(group[0]);
-          setGroupedExhibitionsAtLocation(group);
-          setCurrentIndexInGroup(0);
-        });
+    const groupedByExactLocation = new Map<string, Exhibition[]>();
+    
+    exhibitions.forEach((exhibition) => {
+      if (exhibition.coordinates) {
+        const key = `${exhibition.coordinates.lat},${exhibition.coordinates.lng}`;
+        if (!groupedByExactLocation.has(key)) {
+          groupedByExactLocation.set(key, []);
+        }
+        groupedByExactLocation.get(key)!.push(exhibition);
       }
     });
+
+    groupedByExactLocation.forEach((group) => {
+      const exhibition = group[0];
+      const hasProxima = group.some(e => e.status === 'proxima');
+      const markerColor = hasProxima ? '#dc2626' : '#000';
+      
+      const customIcon = L.divIcon({
+        className: 'custom-marker',
+        html: `<div style="width: 14px; height: 14px; background: ${markerColor}; border: 3px solid #fff; box-shadow: 0 0 0 2px ${markerColor}; transition: transform 0.2s;"></div>`,
+        iconSize: [14, 14],
+        iconAnchor: [7, 7],
+      });
+      
+      const marker = L.marker(
+        [exhibition.coordinates!.lat, exhibition.coordinates!.lng],
+        { 
+          icon: customIcon,
+          title: group.length > 1 ? `${group.length} exposiciones` : exhibition.title,
+          exhibition: exhibition
+        }
+      );
+      
+      marker.on('click', function(e: any) {
+        L.DomEvent.stopPropagation(e);
+        setSelectedExhibition(group[0]);
+        setGroupedExhibitionsAtLocation(group);
+        setCurrentIndexInGroup(0);
+      });
+      
+      marker.getElement()?.addEventListener('click', function(e: Event) {
+        e.stopPropagation();
+        setSelectedExhibition(group[0]);
+        setGroupedExhibitionsAtLocation(group);
+        setCurrentIndexInGroup(0);
+      });
+      
+      markers.addLayer(marker);
+    });
+
+    mapInstance.addLayer(markers);
 
     mapInstance.on('click', function() {
       setSelectedExhibition(null);
@@ -174,7 +195,7 @@ export function MapClient({ exhibitions }: MapClientProps) {
     return () => {
       mapInstance.remove();
     };
-  }, [L, exhibitions]);
+  }, [L, MarkerClusterGroup, exhibitions]);
 
   return (
     <div className="space-y-4">
