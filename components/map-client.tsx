@@ -9,27 +9,30 @@ interface MapClientProps {
 
 export function MapClient({ exhibitions }: MapClientProps) {
   const [map, setMap] = useState<any>(null);
-  const [L, setL] = useState<any>(null);
-  const [MarkerClusterGroup, setMarkerClusterGroup] = useState<any>(null);
   const [selectedExhibition, setSelectedExhibition] = useState<Exhibition | null>(null);
   const [groupedExhibitionsAtLocation, setGroupedExhibitionsAtLocation] = useState<Exhibition[]>([]);
   const [currentIndexInGroup, setCurrentIndexInGroup] = useState(0);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      Promise.all([
-        import("leaflet"),
-        import("leaflet.markercluster")
-      ]).then(([leaflet, markerCluster]) => {
-        setL(leaflet.default);
-        setMarkerClusterGroup((leaflet.default as any).MarkerClusterGroup);
-      });
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!L || !MarkerClusterGroup) return;
     if (map) return;
+
+    let mapInstance: any;
+    let isMounted = true;
+    
+    const initMap = async () => {
+      const L = (await import("leaflet")).default;
+      (window as any).L = L;
+      
+      await import("leaflet.markercluster");
+      
+      if (!isMounted) return;
+      
+      const container = L.DomUtil.get('map');
+      if (container != null) {
+        (container as any)._leaflet_id = null;
+      }
+      
+      const MarkerClusterGroup = (L as any).MarkerClusterGroup;
 
     const link = document.createElement("link");
     link.rel = "stylesheet";
@@ -104,22 +107,23 @@ export function MapClient({ exhibitions }: MapClientProps) {
     `;
     document.head.appendChild(style);
 
-    const mapInstance = L.map("map", {
-      zoomControl: true,
-      scrollWheelZoom: true,
-    }).setView([-34.6037, -58.3816], 4);
+      mapInstance = L.map("map", {
+        zoomControl: true,
+        scrollWheelZoom: true,
+      }).setView([-34.6037, -58.3816], 4);
 
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      attribution: '&copy; OpenStreetMap',
-      minZoom: 3,
-      maxZoom: 10,
-    }).addTo(mapInstance);
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution: '&copy; OpenStreetMap',
+        minZoom: 2,
+        maxZoom: 18,
+      }).addTo(mapInstance);
 
-    const markers = new MarkerClusterGroup({
-      maxClusterRadius: 80,
-      spiderfyOnMaxZoom: true,
-      showCoverageOnHover: false,
-      zoomToBoundsOnClick: true,
+      const markers = new MarkerClusterGroup({
+        maxClusterRadius: 60,
+        spiderfyOnMaxZoom: false,
+        showCoverageOnHover: false,
+        zoomToBoundsOnClick: true,
+        disableClusteringAtZoom: 13,
       iconCreateFunction: function(cluster: any) {
         const markers = cluster.getAllChildMarkers();
         const hasProxima = markers.some((m: any) => m.options.exhibition?.status === 'proxima');
@@ -184,18 +188,26 @@ export function MapClient({ exhibitions }: MapClientProps) {
       markers.addLayer(marker);
     });
 
-    mapInstance.addLayer(markers);
+      mapInstance.addLayer(markers);
 
-    mapInstance.on('click', function() {
-      setSelectedExhibition(null);
-    });
+      mapInstance.on('click', function() {
+        setSelectedExhibition(null);
+      });
 
-    setMap(mapInstance);
+      if (isMounted) {
+        setMap(mapInstance);
+      }
+    };
+    
+    initMap();
 
     return () => {
-      mapInstance.remove();
+      isMounted = false;
+      if (mapInstance) {
+        mapInstance.remove();
+      }
     };
-  }, [L, MarkerClusterGroup, exhibitions]);
+  }, []);
 
   return (
     <div className="space-y-4">
