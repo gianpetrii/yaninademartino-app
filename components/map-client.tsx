@@ -54,6 +54,8 @@ export function MapClient({ exhibitions }: MapClientProps) {
       .leaflet-container {
         background: #fafafa !important;
         font-family: inherit;
+        position: relative !important;
+        z-index: 0 !important;
       }
       .leaflet-tile {
         filter: grayscale(100%) contrast(1.2) brightness(1.1);
@@ -110,6 +112,10 @@ export function MapClient({ exhibitions }: MapClientProps) {
       mapInstance = L.map("map", {
         zoomControl: true,
         scrollWheelZoom: true,
+        zoomAnimation: true,
+        zoomAnimationThreshold: 4,
+        fadeAnimation: true,
+        markerZoomAnimation: true,
       }).setView([-34.6037, -58.3816], 4);
 
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -124,6 +130,8 @@ export function MapClient({ exhibitions }: MapClientProps) {
         showCoverageOnHover: false,
         zoomToBoundsOnClick: true,
         disableClusteringAtZoom: 13,
+        animate: true,
+        animateAddingMarkers: true,
       iconCreateFunction: function(cluster: any) {
         const markers = cluster.getAllChildMarkers();
         const hasProxima = markers.some((m: any) => m.options.exhibition?.status === 'proxima');
@@ -218,7 +226,7 @@ export function MapClient({ exhibitions }: MapClientProps) {
         />
         
         {selectedExhibition && (
-          <div className="absolute bottom-4 left-4 right-4 z-[1000] animate-slide-in-bottom border-2 border-foreground bg-background p-6 shadow-[8px_8px_0_0_rgba(0,0,0,1)] md:left-auto md:right-4 md:w-96">
+          <div className="absolute bottom-4 left-4 right-4 z-[40] animate-slide-in-bottom border-2 border-foreground bg-background p-6 shadow-[8px_8px_0_0_rgba(0,0,0,1)] md:left-auto md:right-4 md:w-96">
             <button
               onClick={() => {
                 setSelectedExhibition(null);
