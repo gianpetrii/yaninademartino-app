@@ -79,15 +79,17 @@ export function MapClient({ exhibitions }: MapClientProps) {
       maxZoom: 10,
     }).addTo(mapInstance);
 
-    const customIcon = L.divIcon({
-      className: 'custom-marker',
-      html: '<div style="width: 14px; height: 14px; background: #000; border: 3px solid #fff; box-shadow: 0 0 0 2px #000; transition: transform 0.2s;"></div>',
-      iconSize: [14, 14],
-      iconAnchor: [7, 7],
-    });
-
     exhibitions.forEach((exhibition) => {
       if (exhibition.coordinates) {
+        const markerColor = exhibition.status === 'proxima' ? '#dc2626' : '#000';
+        
+        const customIcon = L.divIcon({
+          className: 'custom-marker',
+          html: `<div style="width: 14px; height: 14px; background: ${markerColor}; border: 3px solid #fff; box-shadow: 0 0 0 2px ${markerColor}; transition: transform 0.2s;"></div>`,
+          iconSize: [14, 14],
+          iconAnchor: [7, 7],
+        });
+        
         const marker = L.marker(
           [exhibition.coordinates.lat, exhibition.coordinates.lng],
           { 
@@ -142,14 +144,25 @@ export function MapClient({ exhibitions }: MapClientProps) {
                 {selectedExhibition.title}
               </h3>
               <div className="space-y-1 text-sm font-light text-muted-foreground animate-fade-in-left" style={{ animationDelay: '0.1s' }}>
-                <p className="uppercase tracking-wider">{selectedExhibition.venue}</p>
+                <div className="flex items-center gap-2">
+                  {selectedExhibition.status === 'proxima' && (
+                    <span className="inline-block h-2 w-2 bg-red-600"></span>
+                  )}
+                  <p className="uppercase tracking-wider">{selectedExhibition.venue}</p>
+                </div>
                 <p>{selectedExhibition.city}, {selectedExhibition.country}</p>
                 <p>{selectedExhibition.year}</p>
-                {selectedExhibition.type && (
-                  <p className="uppercase tracking-wider pt-2">
+                <div className="flex gap-2 pt-2">
+                  <span className="uppercase tracking-wider">
                     {selectedExhibition.type === 'individual' ? 'Individual' : 'Colectiva'}
-                  </p>
-                )}
+                  </span>
+                  {selectedExhibition.status === 'proxima' && (
+                    <>
+                      <span>·</span>
+                      <span className="uppercase tracking-wider text-red-600">Próxima</span>
+                    </>
+                  )}
+                </div>
               </div>
               {selectedExhibition.description && (
                 <p className="pt-2 text-sm font-light leading-relaxed animate-fade-in-left" style={{ animationDelay: '0.2s' }}>
@@ -161,9 +174,19 @@ export function MapClient({ exhibitions }: MapClientProps) {
         )}
       </div>
       
-      <p className="text-xs font-light uppercase tracking-wider text-muted-foreground">
-        Click en los puntos para ver detalles
-      </p>
+      <div className="flex items-center gap-6 text-xs font-light uppercase tracking-wider text-muted-foreground">
+        <span>Click en los puntos para ver detalles</span>
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            <span className="inline-block h-3 w-3 border-2 border-foreground bg-foreground"></span>
+            <span>Pasadas</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="inline-block h-3 w-3 border-2 border-red-600 bg-red-600"></span>
+            <span>Próximas</span>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
