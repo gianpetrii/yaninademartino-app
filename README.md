@@ -1,6 +1,21 @@
 # Yanina De Martino
 
-Sitio web institucional de la artista visual.
+## Descripción del proyecto
+
+**Sitio institucional** de la artista visual Yanina De Martino: obra, galería, premios y navegación por secciones definidas en `app/`, con posibilidad de contenido dinámico vía Firebase.
+
+## Problema que resuelve
+
+Da una presencia web curada y mantenible frente a perfiles sociales solos, para que curadores, medios y público encuentren obra, contexto y recorrido en un dominio propio.
+
+## Stack
+
+- Next.js, TypeScript, React
+- Firebase, TanStack Query, Zustand, React Hook Form, Zod
+
+## Requisitos
+
+- Node.js LTS
 
 ## Instalación
 
@@ -9,20 +24,14 @@ npm install
 npm run dev
 ```
 
-## Estructura
+Scripts: `build`, `start`, `lint`, `format`.
 
-- `/` - Hero + obra destacada + mapa + premios recientes + navegación
-- `/obras` - Galería con animaciones y efectos hover
-- `/exposiciones` - Mapa interactivo con puntos clickeables
-- `/premios` - Timeline completa de reconocimientos
-- `/talleres` - Grid de formación
-- `/prensa` - Artículos con imágenes y links externos
-- `/contacto` - Formulario de contacto
+## Variables de entorno
 
-## Datos
+`.env.local` con `NEXT_PUBLIC_FIREBASE_*` si usás Firebase en este despliegue.
 
-Los datos están hardcodeados en cada página (`app/*/page.tsx`).
+## Rutas principales
 
-## Imágenes
-
-Coloca imágenes en `public/images/obras/` y actualiza las rutas en los arrays de datos.
+- `/` — inicio, obra destacada, mapa, premios
+- `/obras` — galería
+- Otras rutas: revisá la carpeta `app/`
